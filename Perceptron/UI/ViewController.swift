@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  PerceptronBrain
 //
-//  Created by Keith Dev on 14/08/2019.
+//  Created by Sophie Kua
 //  Copyright © 2019 Founders4Schools. All rights reserved.
 //
 
