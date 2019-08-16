@@ -9,13 +9,14 @@
 import UIKit
 
 class Line {
+    let gradient: CGFloat
+    let yIntercept: CGFloat
+    
     init(gradient: CGFloat, yIntercept: CGFloat){
         self.gradient = gradient
         self.yIntercept = yIntercept
     }
-    var gradient: CGFloat
-    var yIntercept: CGFloat
-    
+
     func y(x:CGFloat) -> CGFloat {
         let y = gradient * x + yIntercept
         return y

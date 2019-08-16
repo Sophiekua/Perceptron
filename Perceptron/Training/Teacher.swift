@@ -10,15 +10,15 @@ import UIKit
 
 class Teacher {
     let learningRate: CGFloat = 0.1
-    var line: Line
-    var perceptron: Perceptron
+    let line: Line
+    let perceptron: Perceptron
     
     init(line:Line, perceptron: Perceptron){
         self.line = line
         self.perceptron = perceptron
     }
     func train(){
-        let trainingGenerator: TrainingDataGenerator = TrainingDataGenerator(line: line, numOfPoints: 1000)
+        let trainingGenerator: TrainingDataGenerator = TrainingDataGenerator(line: line, numOfPoints: 10000)
         
         let answers = trainingGenerator.generate()
         for answer in answers {
@@ -26,18 +26,16 @@ class Teacher {
             let y = answer.point.y
             let perceptronAnswer = perceptron.processInputs(inputs: [x,y])
             let difference = answer.isAbove - perceptronAnswer
-            adjustPerceptron(perceptron: perceptron, difference: difference)
+            adjustPerceptron(perceptron: perceptron, inputs: [x,y], difference: difference)
         }
         
     }
-    func adjustPerceptron(perceptron:Perceptron, difference: Int ) {
+    func adjustPerceptron(perceptron:Perceptron, inputs: [CGFloat], difference: Int ) {
         if difference == 0 { return }
-        
         let adjustmentFactor = CGFloat(difference) * learningRate
         perceptron.bias = perceptron.bias + adjustmentFactor
         for i in 0..<perceptron.numberOfWeights{
-            perceptron.weights[i] = perceptron.weights[i] + adjustmentFactor
-            
+            perceptron.weights[i] = perceptron.weights[i] + inputs[i] * adjustmentFactor
         }
     }
     

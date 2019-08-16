@@ -15,18 +15,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var graphView: GraphView!
     let numberToolbar: UIToolbar = UIToolbar()
     
+    var perceptron = Perceptron(numberOfWeights: 2)
+    var line: Line = Line(gradient: 0, yIntercept: 0)
+    var points: [Point] = []
     
     // Train the perceptron to understand what points are above and below the line
     @IBAction func trainPerceptron(_ sender: Any) {
-        let perceptron = Perceptron(numberOfWeights: 2)
-        let  line = graphView.line
+        perceptron = Perceptron(numberOfWeights: 2)
+        generateLineFromUserInput()
         let teacher = Teacher(line: line, perceptron: perceptron)
         teacher.train()
-        graphView.perceptron = perceptron
-        graphView.line = graphView.line
-        graphView.points = []
-        
-        // Do perceptron training here
+        displayGraph()
     }
     
     // Uses the gradient angle and intercept values the user has entered to create
@@ -35,8 +34,7 @@ class ViewController: UIViewController {
         let gradientDegrees = Float(lineGradient?.text ?? "0") ?? 0.0
         let gradient = CGFloat(tan(gradientDegrees*Float.pi/180.0))
         let yIntercept = CGFloat(Float(lineYIntercept?.text ?? "0") ?? Float(0))
-        graphView.points = []
-        graphView.line = Line(gradient: gradient, yIntercept: yIntercept)
+        line = Line(gradient: gradient, yIntercept: yIntercept)
     }
     
     // Tests the perceptron's understanding of what is above and below the line
@@ -49,18 +47,25 @@ class ViewController: UIViewController {
         graphView.points = testPoints
     }
     
+    func displayGraph() {
+        graphView.perceptron = perceptron
+        graphView.line = line
+        graphView.points = points
+    }
+    
     override func viewDidLoad() {
         setupNumberpad()
         generateLineFromUserInput()
+        displayGraph()
     }
 }
 
 
-// User interface helpers
+// MARK:- User interface helpers
 extension ViewController {
     // One-time only configuration of the number pad used to enter numbers
     func setupNumberpad() {
-        numberToolbar.barStyle = UIBarStyle.blackTranslucent
+        numberToolbar.barStyle = .default
         numberToolbar.items=[
             UIBarButtonItem(title: "+/-", style: .plain, target: self, action: #selector(toggleMinus)),
             UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil),
@@ -76,6 +81,7 @@ extension ViewController {
         if lineGradient.isFirstResponder { lineGradient.resignFirstResponder() }
         if lineYIntercept.isFirstResponder { lineYIntercept.resignFirstResponder() }
         generateLineFromUserInput()
+        displayGraph()
     }
     
     // Toggles between positive and negative values for numbers entered using the number pad

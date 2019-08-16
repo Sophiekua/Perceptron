@@ -7,7 +7,11 @@ import UIKit
 class GraphView: UIView {
     
     //The star of the show! The perceptron is our AI's brain
-    var perceptron: Perceptron = Perceptron(numberOfWeights: 2)
+    var perceptron: Perceptron = Perceptron(numberOfWeights: 2) {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
     
     // The color to be used when drawing the axes of the graph
     let axesColor = UIColor.init(white: 0.7, alpha: 1).cgColor
@@ -25,7 +29,7 @@ class GraphView: UIView {
     
     // The straight line. We generate points randomly and use our perceptron
     // to decide whether each of the points is above or below the line
-    var line: Line = Line(gradient: 1, yIntercept: 10) {
+    var line: Line = Line(gradient: 0, yIntercept: 0) {
         didSet {
             // If we set a new line we want to redraw the graph
             setNeedsDisplay()

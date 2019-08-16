@@ -9,8 +9,8 @@
 import UIKit
 
 struct Point {
-    var x: CGFloat
-    var y: CGFloat
+    let x: CGFloat
+    let y: CGFloat
     init(x: CGFloat, y:CGFloat){
         self.x = x
         self.y = y
